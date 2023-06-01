@@ -35,9 +35,9 @@ function Root() {
   return (
     <>
         <CssBaseline />
-        <Navbar handleMode={handleMode} />
+        <Navbar/>
         <Routes>
-          <Route path='/home' element={<Home />} />
+          <Route path='/' element={<Home />} />
           <Route path='/product' element={<Product />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/UserProfile' element={<UserProfile />} />
