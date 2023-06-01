@@ -1,25 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 
-function App() {
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Product from './pages/Product';
+import Cart from './pages/Cart';
+import UserProfile from './pages/UserProfile';
+import {
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+} from "react-router-dom";
+import { useMemo, useState } from 'react';
+import { themeSetting } from './theme';
+
+const router = createBrowserRouter([
+  { path: "*", Component: Root },
+]);
+export default function App() {
+  return <RouterProvider router={router} />;
+}
+function Root() {
+  const [mode, setMode] = useState("light");
+
+  const handleMode = () => {
+    if (mode === "light")
+      setMode("dark");
+    else
+      setMode("light");
+  }
+
+  const theme = useMemo(() => createTheme(themeSetting(mode)), [mode]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <CssBaseline />
+        <Navbar handleMode={handleMode} />
+        <Routes>
+          <Route path='/home' element={<Home />} />
+          <Route path='/product' element={<Product />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/UserProfile' element={<UserProfile />} />
+        </Routes>
+    </>
   );
 }
 
-export default App;
