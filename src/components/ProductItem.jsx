@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router';
 const ProductItem = () => {
   const navigate = useNavigate();
   return (
-    <Box sx={{padding:"1rem", maxWidth:"25rem", borderRadius:"0.5rem", cursor:"pointer", boxShadow:"0px 2px 4px 0px grey"}}>
+    <Box sx={{padding:"1rem", maxWidth:"25rem", borderRadius:"0.5rem", cursor:"pointer", boxShadow:"0px 2px 4px 0px grey"}} onClick={()=>navigate('/product')}>
       <Flex sx={{justifyContent:"center"}}>
       <img src="https://m.media-amazon.com/images/I/81xr5ikwmLL._UX695_.jpg" alt="product"
       style={{height:"100%", width:"70%"}} />
