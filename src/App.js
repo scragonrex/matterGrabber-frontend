@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import { useMemo, useState } from 'react';
 import { themeSetting } from './theme';
+import Signup from './pages/Signup';
 
 const router = createBrowserRouter([
   { path: "*", Component: Root },
@@ -41,6 +42,7 @@ function Root() {
           <Route path='/product' element={<Product />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/UserProfile' element={<UserProfile />} />
+          <Route path='/signup' element={<Signup />} />
         </Routes>
     </>
   );
