@@ -3,8 +3,31 @@ import React from 'react'
 import Flex from './Flex'
 import { AccountCircle, Search, ShoppingCart } from '@mui/icons-material'
 import { useNavigate } from 'react-router'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useDispatch } from 'react-redux'
+import { setLogout } from '../store/authSlice'
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = ()=>{
+    handleClose();
+    navigate('/userProfile');
+  }
+  const handleLogout = ()=>{
+    handleClose();
+    dispatch(setLogout());
+  }
   return (
     <Flex sx={{padding:"0.5rem",justifyContent:"space-between", boxShadow:"0 0 4px"}}>
       <Flex gap={1}>
@@ -22,8 +45,20 @@ const Navbar = () => {
           <ShoppingCart onClick={()=>navigate("/cart")}/>
         </IconButton>
         <IconButton>
-          <AccountCircle onClick={()=>navigate("/UserProfile")}/>
+          <AccountCircle onClick={handleClick}/>
         </IconButton>
+        <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
       </Flex>
     </Flex>
   )
