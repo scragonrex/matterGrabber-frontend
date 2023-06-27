@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import * as yup from 'yup'  //* for importing every content of that module
 import { Formik } from 'formik'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material'
+import { Alert, Box, Button, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { setLogin } from '../store/authSlice'
+import Flex from './Flex'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -52,6 +55,7 @@ const Form = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const login = async (values, onSubmitProps) => {
+    console.log("logging")
     const response = await fetch("http://localhost:5000/login",
       {
         method: "POST",
@@ -60,8 +64,10 @@ const Form = (props) => {
       });
 
     const loggedIn = await response.json();
+    console.log(loggedIn);
     onSubmitProps.resetForm();
     if (loggedIn) {
+      setOpen(true);
       dispatch(setLogin(
         {
           user: loggedIn.user,
@@ -92,6 +98,16 @@ const Form = (props) => {
     if (pageType == "login") await login(values, onSubmitProps);
 
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <Formik onSubmit={handleFormSubmit}
       initialValues={pageType == "login" ? initialValuesLogin : initialValuesRegister}
@@ -108,45 +124,50 @@ const Form = (props) => {
           resetForm,
         }) => (
           <form onSubmit={handleSubmit}>
-            <Box>
+            <Box sx={{ display: "flex", flexDirection: "column", border: '1px solid balck', gap: '2rem' }}>
               {pageType == "register" && (
                 <>
-                  <TextField name='firstName'
-                    value={values.firstname}
-                    required label="Firstname"
-                    variant="outlined"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={Boolean(touched.firstName && Boolean(errors.firstName))}
-                    helperText={touched.firstName && errors.firstName} />
+                  <Box sx={{ display: "flex", gap: "1rem" }}>
+                    <TextField name='firstName'
+                      value={values.firstname}
+                      required label="Firstname"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={Boolean(touched.firstName && Boolean(errors.firstName))}
+                      helperText={touched.firstName && errors.firstName} />
 
-                  <TextField name='lastName'
-                    value={values.lastname}
-                    required label="Lastname"
-                    variant="outlined"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={Boolean(touched.lastName && Boolean(errors.lastName))}
-                    helperText={touched.lastName && errors.lastName} />
+                    <TextField name='lastName'
+                      value={values.lastname}
+                      required label="Lastname"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={Boolean(touched.lastName && Boolean(errors.lastName))}
+                      helperText={touched.lastName && errors.lastName} />
+                  </Box>
 
-                  <TextField name='email'
-                    value={values.email}
-                    required label="Email"
-                    variant="outlined"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={Boolean(touched.email && Boolean(errors.email))}
-                    helperText={touched.email && errors.email} />
+                  <Box sx={{ display: "flex", gap: "1rem" }}>
+                    <TextField name='email'
+                      value={values.email}
+                      required label="Email"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={Boolean(touched.email && Boolean(errors.email))}
+                      helperText={touched.email && errors.email} />
 
-                  <TextField name='age'
-                    value={values.age}
-                    required label="Age"
-                    type="number"
-                    variant="outlined"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={Boolean(touched.age && Boolean(errors.age))}
-                    helperText={touched.age && errors.age} />
+                    <TextField name='age'
+                      value={values.age}
+                      required label="Age"
+                      type="number"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      error={Boolean(touched.age && Boolean(errors.age))}
+                      helperText={touched.age && errors.age} />
+                  </Box>
+
 
                   <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -200,6 +221,7 @@ const Form = (props) => {
                       label="Confirm Password"
                     />
                   </FormControl>
+
                 </>
               )}
               {pageType == "login" && (<>
@@ -213,21 +235,45 @@ const Form = (props) => {
                   helperText={touched.email && errors.email}
                 />
 
-                <TextField
-                  label="Password"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.password}
-                  name="password"
-                  type="password"
-                  error={Boolean(touched.password && Boolean(errors.password))}
-                  helperText={touched.password && errors.password}
-                />
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    name='password' value={values.password}
+                    type={showPassword ? 'text' : 'password'}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={Boolean(touched.password && Boolean(errors.password))}
+                    helperText={touched.password && errors.password}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                  />
+                </FormControl>
+                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}  anchorOrigin={{ vertical:"top", horizontal:"center" }}>
+                  <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    This is a success message!
+                  </Alert>
+                </Snackbar>
               </>)}
+              <Button type='submit' variant='contained'>{props.pageType === 'login' ? <Typography>Login</Typography> : <Typography>Register</Typography>}</Button>
+              {
+                pageType === "login" ? (
+                  <div><span>Dont have an Account?. </span><Button onClick={() => navigate('/signup')}>SignUp</Button><span>here!</span></div>
+                ) :
+                  <div><span>Already have an account.</span><Button onClick={() => navigate('/')}>Login</Button><span>here</span></div>
+              }
             </Box>
-            <Button
-              fullWidth
-              type="submit">submit</Button>
           </form>)
       }
     </Formik>
