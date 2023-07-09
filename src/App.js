@@ -45,7 +45,8 @@ function Root() {
         <Routes>
           <Route path='/' element={<Login pageType="login"/>} />
           <Route path='/signup' element={<Signup pageType="register"/>} />
-          <Route path='/home' element={isAuth ? <Home/> : <Navigate to='/'/>} />
+          {/* <Route path='/home' element={isAuth ? <Home/> : <Navigate to='/'/>} /> */}
+          <Route path='/home' element={<Home/>} />
           <Route path='/product' element={isAuth ? <Product /> : <Navigate to='/'/>} />
           <Route path='/cart' element={isAuth ? <Cart /> : <Navigate to='/'/>} />
           <Route path='/UserProfile' element={isAuth ? <UserProfile /> : <Navigate to='/'/>} />

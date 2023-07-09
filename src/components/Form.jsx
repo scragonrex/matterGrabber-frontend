@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import * as yup from 'yup'  //* for importing every content of that module
 import { Formik } from 'formik'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Alert, Box, Button, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, TextField, Typography } from '@mui/material'
+import { Alert, Box, FormControl, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { setLogin } from '../store/authSlice'
 import Flex from './Flex'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import Button from './Button'
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -266,12 +266,19 @@ const Form = (props) => {
                   </Alert>
                 </Snackbar>
               </>)}
-              <Button type='submit' variant='contained'>{props.pageType === 'login' ? <Typography>Login</Typography> : <Typography>Register</Typography>}</Button>
+              <Button
+            type='submit'>{props.pageType === 'login' ?"Login" :"Register"}</Button>
               {
                 pageType === "login" ? (
-                  <div><span>Dont have an Account?. </span><Button onClick={() => navigate('/signup')}>SignUp</Button><span>here!</span></div>
+                  <div>Dont have an Account?. <Typography sx={{
+                    fontSize:"1rem", display:"inline",
+                    fontWeight:"bold", margin:"0 2px", transition:"0.3s", cursor:"pointer", color:"#027cff", "&:hover":{textDecoration:"underline"}
+                  }} onClick={() => navigate('/signup')}> SignUp</Typography>here!</div>
                 ) :
-                  <div><span>Already have an account.</span><Button onClick={() => navigate('/')}>Login</Button><span>here</span></div>
+                  <div><span>Already have an account.</span><Typography sx={{
+                    fontSize:"1rem", display:"inline",
+                    fontWeight:"bold", margin:"0 2px", transition:"0.3s", cursor:"pointer", color:"#027cff", "&:hover":{textDecoration:"underline"}
+                  }} onClick={() => navigate('/')}>Login</Typography><span>here</span></div>
               }
             </Box>
           </form>)

@@ -2,9 +2,11 @@ import React from 'react'
 import Flex from '../components/Flex'
 import { Box, Typography } from '@mui/material'
 import ProductItem from '../components/ProductItem'
+import Silder from '../components/Silder'
 
 function Home() {
   return (<>
+    <Silder/>
    <Flex sx={{justifyContent:"space-between", padding:"1rem", backdropFilter:"brightness(0.98)"}}>
     <Box sx={{width:"60%"}}>
      <Typography variant='h2'>Hello!. Welcome to our Matter Grabber.</Typography> 
